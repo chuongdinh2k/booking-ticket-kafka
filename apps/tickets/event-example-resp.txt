@@ -1,0 +1,23 @@
+- response of an event: 
+
+{
+  title: "taylor concert",
+  description: "music concert",
+  start_date: "",
+  end_date: "",
+  location: "",
+  type_of_ticket: [
+    {
+      name: "normal",
+      price: 10,
+      amount: 1000,
+      avail_number: 1000
+    },
+    {
+      name: "vip",
+      price: 30,
+      amount: 150,
+      avail_number: 150
+    } 
+  ]
+}

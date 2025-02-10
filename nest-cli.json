@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/book-tickets-kafka/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/book-tickets-kafka/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/book-tickets-kafka",
+  "projects": {
+    "apps/tickets": {
+      "type": "application",
+      "root": "apps/apps/tickets",
+      "entryFile": "main",
+      "sourceRoot": "apps/apps/tickets/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/apps/tickets/tsconfig.app.json"
+      }
+    },
+    "db-config": {
+      "type": "library",
+      "root": "libs/db-config",
+      "entryFile": "index",
+      "sourceRoot": "libs/db-config/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/db-config/tsconfig.lib.json"
+      }
+    },
+    "kafka-config": {
+      "type": "library",
+      "root": "libs/kafka-config",
+      "entryFile": "index",
+      "sourceRoot": "libs/kafka-config/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/kafka-config/tsconfig.lib.json"
+      }
+    },
+    "libs": {
+      "type": "library",
+      "root": "libs/libs",
+      "entryFile": "index",
+      "sourceRoot": "libs/libs/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/libs/tsconfig.lib.json"
+      }
+    },
+    "order-processor": {
+      "type": "application",
+      "root": "apps/order-processor",
+      "entryFile": "main",
+      "sourceRoot": "apps/order-processor/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/order-processor/tsconfig.app.json"
+      }
+    },
+    "orders-query": {
+      "type": "application",
+      "root": "apps/orders-query",
+      "entryFile": "main",
+      "sourceRoot": "apps/orders-query/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/orders-query/tsconfig.app.json"
+      }
+    },
+    "orders-taker": {
+      "type": "application",
+      "root": "apps/orders-taker",
+      "entryFile": "main",
+      "sourceRoot": "apps/orders-taker/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/orders-taker/tsconfig.app.json"
+      }
+    },
+    "payments": {
+      "type": "application",
+      "root": "apps/payments",
+      "entryFile": "main",
+      "sourceRoot": "apps/payments/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/payments/tsconfig.app.json"
+      }
+    },
+    "tickets": {
+      "type": "application",
+      "root": "apps/tickets",
+      "entryFile": "main",
+      "sourceRoot": "apps/tickets/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/tickets/tsconfig.app.json"
+      }
+    }
+  }
+}
