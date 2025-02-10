@@ -41,7 +41,9 @@ KAFKA_BROKER=localhost:9092
 docker-compose -f kafka/docker-compose.yaml up
 ```
 
-5. Running application:
+5. Running application ( dev ):
 
 - Running tickets service:
+  ```sh
   npm run start:dev tickets
+  ```

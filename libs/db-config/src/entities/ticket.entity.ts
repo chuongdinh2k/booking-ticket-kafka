@@ -5,9 +5,9 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { User } from './user.entity';
 import { AppEvent } from './event.entity';
 import { TicketStatus } from '../enums/ticket.enum';
+import { TicketTypeEntity } from './ticket-type.entity';
 import { Order } from './order.entity';
 
 @Entity()
@@ -19,7 +19,7 @@ export class Ticket {
   uuid: string;
 
   @Column()
-  date: Date;
+  seat: string;
 
   @Column({ type: 'int' })
   status: TicketStatus;
@@ -27,6 +27,9 @@ export class Ticket {
   @ManyToOne(() => AppEvent, (event) => event.tickets)
   @JoinColumn({ name: 'event_id' })
   event: AppEvent;
+
+  @ManyToOne(() => TicketTypeEntity, (tickeType) => tickeType.tickets)
+  ticket_type: TicketTypeEntity;
 
   @ManyToOne(() => Order, (order) => order.tickets)
   order: Order;

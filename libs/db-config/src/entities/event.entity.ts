@@ -13,13 +13,17 @@ export class AppEvent {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    name: 'start_date',
+  })
   start_date: Date;
 
   @Column()
   title: string;
 
-  @Column()
+  @Column({
+    name: 'end_date',
+  })
   end_date: Date;
 
   @Column()
@@ -31,9 +35,21 @@ export class AppEvent {
   @Column()
   thumbnail: string;
 
+  @Column({
+    name: 'open_date',
+    nullable: true,
+  })
+  open_date: Date;
+
+  @Column({
+    name: 'close_date',
+    nullable: true,
+  })
+  close_date: Date;
+
   @OneToMany(() => Ticket, (ticket) => ticket.event)
   tickets: Ticket[];
 
-  @OneToMany(() => TicketTypeEntity, (ticketType) => ticketType.event)
+  @OneToMany(() => TicketTypeEntity, (ticketType) => ticketType.id)
   type_of_ticket: TicketTypeEntity[];
 }
