@@ -1,3 +1,15 @@
+- request: 
+{
+  "start_date": "2025-02-10T10:00:00Z",
+  "end_date": "2025-02-10T12:00:00Z",
+  "open_date": "2025-02-10T10:00:00Z",
+  "close_date": "2025-02-10T10:00:00Z",
+  "title": "Chuong dinh concert",
+  "description": "A live concert event featuring various artists.",
+  "location": "Central Park, New York",
+  "thumbnail": "http://example.com/thumbnail.jpg"
+}
+
 - response of an event: 
 
 {

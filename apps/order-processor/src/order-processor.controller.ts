@@ -11,8 +11,13 @@ export class OrderProcessorController {
 
   @MessagePattern('order.created')
   async processOrder(data: any) {
-    console.log('Order created', data);
-    return { status: 'Order processed', data: data };
+    try {
+      const result = await this.orderProcessorService.processorOder(data.data);
+      return { status: 'Order processed', data: result };
+    } catch (error) {
+      console.error('Error processing order:', error);
+      return { status: 'Error', message: error.message };
+    }
   }
 
   @Get()

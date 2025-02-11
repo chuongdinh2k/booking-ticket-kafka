@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { Kafka } from 'kafkajs';
 import { Admin } from '@nestjs/microservices/external/kafka.interface';
 import { topicOrderCreated } from './utils/constants';
+import { CreateOrderDto } from './dtos/create-order.dto';
 
 @Controller()
 export class OrdersTakerController {
@@ -48,10 +49,16 @@ export class OrdersTakerController {
     return 'OK';
   }
 
-  @Post('/test-message')
-  async postGameScores(@Body() body: any) {
-    const { ticket_ids } = body;
-    this.client.emit(topicOrderCreated, { data: ticket_ids });
-    return { status: 'message sent', ticket_ids };
+  @Post('/orders')
+  async postGameScores(@Body() body: CreateOrderDto) {
+    const { tickets, user_id, price } = body;
+    this.client.emit(topicOrderCreated, {
+      data: {
+        tickets,
+        user_id,
+        price,
+      },
+    });
+    return { status: 'message sent', tickets, user_id, price };
   }
 }

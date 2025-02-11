@@ -4,9 +4,13 @@ import { OrdersTakerService } from './orders-taker.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { v4 as uuidv4 } from 'uuid';
+import { Order, DbConfigModule } from '@app/db-config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
+    DbConfigModule,
+    TypeOrmModule.forFeature([Order]),
     ConfigModule.forRoot({
       isGlobal: true,
     }),

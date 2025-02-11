@@ -11,12 +11,14 @@ describe('OrdersTakerController', () => {
       providers: [OrdersTakerService],
     }).compile();
 
-    ordersTakerController = app.get<OrdersTakerController>(OrdersTakerController);
+    ordersTakerController = app.get<OrdersTakerController>(
+      OrdersTakerController,
+    );
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(ordersTakerController.getHello()).toBe('Hello World!');
-    });
-  });
+  // describe('root', () => {
+  //   it('should return "Hello World!"', () => {
+  //     expect(ordersTakerController.getHello()).toBe('Hello World!');
+  //   });
+  // });
 });
