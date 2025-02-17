@@ -9,6 +9,10 @@ export class OrderProcessorController {
     @Inject('ORDER_SERVICE') private client: ClientKafka,
   ) {}
 
+  async onModuleInit() {
+    await this.client.connect();
+    this.client.subscribeToResponseOf('order.created');
+  }
   @MessagePattern('order.created')
   async processOrder(data: any) {
     try {

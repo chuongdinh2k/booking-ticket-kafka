@@ -35,6 +35,12 @@
       ],
       "@app/libs/*": [
         "libs/libs/src/*"
+      ],
+      "@app/redis-config": [
+        "libs/redis-config/src"
+      ],
+      "@app/redis-config/*": [
+        "libs/redis-config/src/*"
       ]
     }
   }

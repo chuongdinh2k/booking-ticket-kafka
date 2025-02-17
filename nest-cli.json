@@ -82,6 +82,15 @@
         "tsConfigPath": "apps/payments/tsconfig.app.json"
       }
     },
+    "redis-config": {
+      "type": "library",
+      "root": "libs/redis-config",
+      "entryFile": "index",
+      "sourceRoot": "libs/redis-config/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/redis-config/tsconfig.lib.json"
+      }
+    },
     "tickets": {
       "type": "application",
       "root": "apps/tickets",

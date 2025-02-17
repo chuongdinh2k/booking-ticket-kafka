@@ -1,5 +1,6 @@
 import { Order, Ticket, TicketStatus } from '@app/db-config';
 import { OrderStatus } from '@app/db-config/enums/order.enum';
+import { RedisConfigService } from '@app/redis-config';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
@@ -13,6 +14,7 @@ export class OrderProcessorService {
     @InjectRepository(Ticket)
     private readonly TicketRepository: Repository<Ticket>,
     private readonly dataSource: DataSource,
+    private redisService: RedisConfigService,
   ) {}
   getHello(): string {
     return 'Hello World!';
@@ -23,7 +25,9 @@ export class OrderProcessorService {
     price: number;
     user_id: number;
   }): Promise<any> {
+    console.log('createOrderDto', createOrderDto);
     return this.dataSource.transaction(async (manager) => {
+      let eventId;
       // Create the order
       const order = this.OrderRepository.create({
         uuid: uuid(),
@@ -31,24 +35,40 @@ export class OrderProcessorService {
         status: OrderStatus.PENDING,
         price: createOrderDto.price,
         user: { id: createOrderDto.user_id },
+        tickets: [],
       });
-      const savedOrder = await manager.save(order);
 
-      // Update the ticket status to RESERVED
-      // const ticket = await this.TicketRepository.findOne(
-      //   createOrderDto.ticketId,
-      // );
-      // ticket.status = TicketStatus.RESERVED;
       for (const ticketId of createOrderDto.tickets) {
         const ticket = await this.TicketRepository.findOne({
           where: { id: ticketId },
+          relations: ['event'],
         });
+        console.log('ticket', ticket);
+
         if (!ticket) {
           throw new Error(`Ticket with ID ${ticketId} not found`);
         }
+        eventId = ticket.event.id;
         ticket.status = TicketStatus.RESERVED;
+        order.tickets.push(ticket);
         await manager.save(ticket);
       }
+      const savedOrder = await manager.save(order);
+
+      if (eventId) {
+        // calculate remaining tickets
+        const remainingTickets = await this.TicketRepository.count({
+          where: { status: TicketStatus.AVAILABLE, event: { id: eventId } },
+        });
+
+        // store remaining tickets
+        await this.redisService.setCache(
+          eventId,
+          'remainingTickets',
+          remainingTickets.toString(),
+        );
+      }
+
       console.log('Order saved', savedOrder);
       return savedOrder;
     });

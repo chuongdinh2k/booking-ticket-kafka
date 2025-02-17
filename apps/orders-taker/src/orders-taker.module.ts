@@ -6,9 +6,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { v4 as uuidv4 } from 'uuid';
 import { Order, DbConfigModule } from '@app/db-config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { RedisConfigModule } from '@app/redis-config';
 
 @Module({
   imports: [
+    RedisConfigModule,
     DbConfigModule,
     TypeOrmModule.forFeature([Order]),
     ConfigModule.forRoot({

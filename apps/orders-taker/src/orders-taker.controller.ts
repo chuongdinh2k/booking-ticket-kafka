@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import { OrdersTakerService } from './orders-taker.service';
 import { ClientKafka } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
@@ -6,6 +6,7 @@ import { Kafka } from 'kafkajs';
 import { Admin } from '@nestjs/microservices/external/kafka.interface';
 import { topicOrderCreated } from './utils/constants';
 import { CreateOrderDto } from './dtos/create-order.dto';
+import { RedisConfigService } from '@app/redis-config';
 
 @Controller()
 export class OrdersTakerController {
@@ -13,11 +14,10 @@ export class OrdersTakerController {
   constructor(
     private readonly ordersTakerService: OrdersTakerService,
     @Inject('ORDER_SERVICE') private readonly client: ClientKafka,
-    private configService: ConfigService,
+    private redisService: RedisConfigService,
   ) {}
 
   async onModuleInit() {
-    // this.client.subscribeToResponseOf('game_scores');
     const kafka = new Kafka({
       clientId: 'orders-taker',
       // brokers: [`${this.configService.get<string>('KAFKA_BROKER_IP')}:9092`],
@@ -44,9 +44,23 @@ export class OrdersTakerController {
     }
   }
 
-  @Get('/health')
-  getHealth() {
-    return 'OK';
+  @Post('/ping-redis')
+  async getHealth(@Body() body: any): Promise<boolean> {
+    const { key, value } = body;
+    const status = await this.redisService.setCache('orders', key, value);
+    // const result = await this.redisService.checkConnection();
+    return status;
+  }
+
+  @Post('/cache')
+  async setCache(@Body() body: any): Promise<void> {
+    const { key, value } = body;
+    await this.redisService.setWithExpiry('orders', key, value, 60);
+  }
+  //test redis
+  @Get('/cache/:key')
+  async getCache(@Param('key') key: string): Promise<string | null> {
+    return (await this.redisService.getCache('orders', key)) ? 'true' : 'false';
   }
 
   @Post('/orders')
@@ -60,5 +74,10 @@ export class OrdersTakerController {
       },
     });
     return { status: 'message sent', tickets, user_id, price };
+  }
+
+  @Get('/orders/:id')
+  async getOrders(@Param('id') id: number) {
+    return this.ordersTakerService.getOrder(id);
   }
 }
