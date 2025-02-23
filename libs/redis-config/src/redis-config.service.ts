@@ -1,3 +1,4 @@
+// filepath: /Users/nelisoftwares/Documents/microservices/book-tickets-kafka/libs/redis-config/src/redis-config.service.ts
 import { Injectable, Inject } from '@nestjs/common';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import * as Redis from 'ioredis';
@@ -5,14 +6,33 @@ import * as Redis from 'ioredis';
 @Injectable()
 export class RedisConfigService {
   private redisClient: Redis.Redis;
+
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {
-    this.redisClient = new Redis.Redis();
+    const redisHost = process.env.REDIS_HOST || 'localhost';
+    const redisPort = parseInt(process.env.REDIS_PORT ?? '6379', 10);
+
+    this.redisClient = new Redis.default({
+      host: redisHost,
+      port: redisPort,
+      maxRetriesPerRequest: null,
+    });
+
+    this.redisClient.on('connect', () => {
+      console.log('Redis connection established!');
+    });
+
+    this.redisClient.on('error', (err) => {
+      console.error('Redis connection error', err);
+    });
   }
+
   async checkConnection(): Promise<string> {
     try {
       await this.redisClient.ping();
+      console.log('Redis connection successful');
       return 'Redis connection successful';
     } catch (error) {
+      console.error(`Redis connection failed: ${error.message}`);
       return `Redis connection failed: ${error.message}`;
     }
   }

@@ -9,11 +9,14 @@ import * as redisStore from 'cache-manager-redis-store';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    CacheModule.register({
+    CacheModule.registerAsync({
       isGlobal: true,
-      store: redisStore,
-      host: process.env.REDIS_HOST,
-      port: process.env.REDIS_PORT,
+      useFactory: async (configService: ConfigService) => ({
+        store: redisStore,
+        host: configService.get<string>('REDIS_HOST', 'redis'),
+        port: configService.get<number>('REDIS_PORT', 6379),
+      }),
+      inject: [ConfigService],
     }),
   ],
   providers: [RedisConfigService],

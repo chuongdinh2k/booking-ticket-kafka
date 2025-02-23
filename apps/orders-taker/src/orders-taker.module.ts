@@ -7,11 +7,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { Order, DbConfigModule } from '@app/db-config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RedisConfigModule } from '@app/redis-config';
+import { PrometheusModule } from './prometheus/prometheus.module';
 
 @Module({
   imports: [
     RedisConfigModule,
     DbConfigModule,
+    PrometheusModule,
     TypeOrmModule.forFeature([Order]),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -25,7 +27,7 @@ import { RedisConfigModule } from '@app/redis-config';
           options: {
             client: {
               clientId: `order-consumer-${uuidv4()}`,
-              brokers: [`localhost:9092`],
+              brokers: [process.env.KAFKA_BROKER || 'kafka:29092'],
             },
           },
           consumer: {

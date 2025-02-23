@@ -25,7 +25,6 @@ export class OrderProcessorService {
     price: number;
     user_id: number;
   }): Promise<any> {
-    console.log('createOrderDto', createOrderDto);
     return this.dataSource.transaction(async (manager) => {
       let eventId;
       // Create the order
@@ -43,7 +42,6 @@ export class OrderProcessorService {
           where: { id: ticketId },
           relations: ['event'],
         });
-        console.log('ticket', ticket);
 
         if (!ticket) {
           throw new Error(`Ticket with ID ${ticketId} not found`);
@@ -60,7 +58,6 @@ export class OrderProcessorService {
         const remainingTickets = await this.TicketRepository.count({
           where: { status: TicketStatus.AVAILABLE, event: { id: eventId } },
         });
-
         // store remaining tickets
         await this.redisService.setCache(
           eventId,

@@ -55,6 +55,15 @@
         "tsConfigPath": "apps/order-processor/tsconfig.app.json"
       }
     },
+    "order-session": {
+      "type": "application",
+      "root": "apps/order-session",
+      "entryFile": "main",
+      "sourceRoot": "apps/order-session/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/order-session/tsconfig.app.json"
+      }
+    },
     "orders-query": {
       "type": "application",
       "root": "apps/orders-query",

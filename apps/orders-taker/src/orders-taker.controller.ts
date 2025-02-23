@@ -21,7 +21,8 @@ export class OrdersTakerController {
     const kafka = new Kafka({
       clientId: 'orders-taker',
       // brokers: [`${this.configService.get<string>('KAFKA_BROKER_IP')}:9092`],
-      brokers: [`localhost:9092`],
+      // brokers: [`kafka:9092`],
+      brokers: [process.env.KAFKA_BROKER || 'kafka:29092'],
     });
     this.admin = kafka.admin();
     const topics = await this.admin.listTopics();
@@ -64,16 +65,13 @@ export class OrdersTakerController {
   }
 
   @Post('/orders')
-  async postGameScores(@Body() body: CreateOrderDto) {
-    const { tickets, user_id, price } = body;
-    this.client.emit(topicOrderCreated, {
-      data: {
-        tickets,
-        user_id,
-        price,
-      },
-    });
-    return { status: 'message sent', tickets, user_id, price };
+  async createOrder(@Body() body: CreateOrderDto) {
+    return this.ordersTakerService.createOrder(body);
+  }
+
+  @Post('/orders/generated')
+  async generateOrders() {
+    return this.ordersTakerService.generateOrder();
   }
 
   @Get('/orders/:id')

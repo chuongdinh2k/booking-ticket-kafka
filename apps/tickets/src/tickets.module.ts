@@ -8,9 +8,11 @@ import {
   TicketTypeEntity,
 } from '@app/db-config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { RedisConfigModule } from '@app/redis-config';
 
 @Module({
   imports: [
+    RedisConfigModule,
     DbConfigModule,
     TypeOrmModule.forFeature([Ticket, AppEvent, TicketTypeEntity]),
   ],

@@ -16,11 +16,11 @@ import { TicketTypeEntity } from './entities/ticket-type.entity';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'mysql',
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_DATABASE'),
+        host: configService.get<string>('DB_HOST', 'mysql'),
+        port: configService.get<number>('DB_PORT', 3306),
+        username: configService.get<string>('DB_USERNAME', 'chuong'),
+        password: configService.get<string>('DB_PASSWORD', 'chuong123'),
+        database: configService.get<string>('DB_DATABASE', 'booking_tickets'),
         entities: [Order, AppEvent, Ticket, User, TicketTypeEntity],
         synchronize: true,
       }),
@@ -30,3 +30,4 @@ import { TicketTypeEntity } from './entities/ticket-type.entity';
   ],
 })
 export class DbConfigModule {}
+//dasdas

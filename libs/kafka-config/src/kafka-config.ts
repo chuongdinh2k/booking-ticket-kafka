@@ -4,7 +4,8 @@ export const kafkaConfig: KafkaOptions = {
   transport: Transport.KAFKA,
   options: {
     client: {
-      brokers: ['localhost:9092'],
+      // brokers: ['localhost:9092'],
+      brokers: [process.env.KAFKA_BROKER || 'kafka:29092'],
     },
     consumer: {
       groupId: 'my-consumer-group',

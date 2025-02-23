@@ -6,6 +6,10 @@ import { CreateEventDto, CreateTicketDto } from './dtos/create-ticket.dto';
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
 
+  @Get('/health')
+  getHealth(): string {
+    return this.ticketsService.getHealth();
+  }
   @Post('/events')
   createEvent(@Body() body: CreateEventDto): any {
     return this.ticketsService.createEvent(body);
@@ -23,5 +27,15 @@ export class TicketsController {
   @Get('/events/tickets/:id')
   getTicket(@Param('id') id: number): any {
     return this.ticketsService.getTicketDetail(id);
+  }
+
+  @Get('/events/:id/remainingTickets')
+  getRemainingTickets(@Param('id') id: number): any {
+    return this.ticketsService.getRemainingTickets(id);
+  }
+
+  @Post('/events/generated-100')
+  generateEvents(): any {
+    return this.ticketsService.generateEvent();
   }
 }
