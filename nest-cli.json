@@ -91,6 +91,15 @@
         "tsConfigPath": "apps/payments/tsconfig.app.json"
       }
     },
+    "prometheus-config": {
+      "type": "library",
+      "root": "libs/prometheus-config",
+      "entryFile": "index",
+      "sourceRoot": "libs/prometheus-config/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/prometheus-config/tsconfig.lib.json"
+      }
+    },
     "redis-config": {
       "type": "library",
       "root": "libs/redis-config",

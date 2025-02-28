@@ -1,6 +1,6 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { PrometheusService } from './prometheus.service';
+import { PrometheusService } from './prometheus-config.service';
 
 @Controller('metrics')
 export class PrometheusController {

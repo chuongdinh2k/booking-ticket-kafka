@@ -13,7 +13,8 @@ import * as redisStore from 'cache-manager-redis-store';
       isGlobal: true,
       useFactory: async (configService: ConfigService) => ({
         store: redisStore,
-        host: configService.get<string>('REDIS_HOST', 'redis'),
+        host: configService.get<string>('REDIS_HOST', 'redis'), //for docker
+        // host: 'localhost', // for localhost
         port: configService.get<number>('REDIS_PORT', 6379),
       }),
       inject: [ConfigService],

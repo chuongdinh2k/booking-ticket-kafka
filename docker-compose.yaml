@@ -16,11 +16,15 @@ services:
       - redis
     environment:
       KAFKA_BROKER: kafka:29092
-      # REDIS_HOST: redis
-      # REDIS_PORT: 6378
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     networks:
       - booking-ticket
-
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5' # Limit to 0.5 CPU cores
+          memory: 256M # Limit to 256MB of RAM
   orders-processor: 
     build:
       context: .
@@ -31,7 +35,29 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
-      - "3002:3002"
+      - "9100:9100" # Map port 9100 for Prometheus metrics
+    depends_on:
+      - kafka
+      - mysql
+      - redis
+    environment:
+      KAFKA_BROKER: kafka:29092
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    networks:
+      - booking-ticket
+
+  orders-processor-2: 
+    build:
+      context: .
+      dockerfile: ./apps/order-processor/Dockerfile
+      target: development
+    command: npm run start:dev order-processor
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "9101:9100" # Map port 9101 for Prometheus metrics
     depends_on:
       - kafka
       - mysql
@@ -60,6 +86,11 @@ services:
     depends_on:
       - mysql
       - redis
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'    # Limit to 0.5 CPU cores
+          memory: 512M   # Limit to 512MB of memory
     networks:
       - booking-ticket
   
@@ -123,6 +154,13 @@ services:
       timeout: 5s
       retries: 5
 
+  # prometheus:
+  #   image: prom/prometheus:v3.2
+  #   container_name: booking-ticket-prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - ./monitoring/prometheus.yaml:/etc/prometheus.yaml
 networks:
   booking-ticket:
     driver: bridge

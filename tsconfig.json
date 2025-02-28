@@ -36,6 +36,12 @@
       "@app/libs/*": [
         "libs/libs/src/*"
       ],
+      "@app/prometheus-config": [
+        "libs/prometheus-config/src"
+      ],
+      "@app/prometheus-config/*": [
+        "libs/prometheus-config/src/*"
+      ],
       "@app/redis-config": [
         "libs/redis-config/src"
       ],

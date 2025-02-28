@@ -7,13 +7,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { Order, DbConfigModule } from '@app/db-config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RedisConfigModule } from '@app/redis-config';
-import { PrometheusModule } from './prometheus/prometheus.module';
+import { PrometheusModule } from '@app/prometheus-config';
 
 @Module({
   imports: [
+    PrometheusModule,
     RedisConfigModule,
     DbConfigModule,
-    PrometheusModule,
     TypeOrmModule.forFeature([Order]),
     ConfigModule.forRoot({
       isGlobal: true,

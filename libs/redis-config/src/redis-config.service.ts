@@ -11,6 +11,9 @@ export class RedisConfigService {
     const redisHost = process.env.REDIS_HOST || 'localhost';
     const redisPort = parseInt(process.env.REDIS_PORT ?? '6379', 10);
 
+    // const redisHost = 'localhost';
+    // const redisPort = 6379;
+
     this.redisClient = new Redis.default({
       host: redisHost,
       port: redisPort,

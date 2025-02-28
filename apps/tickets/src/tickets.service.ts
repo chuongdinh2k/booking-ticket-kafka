@@ -11,7 +11,6 @@ import { Repository } from 'typeorm';
 import { CreateEventDto, CreateTicketDto } from './dtos/create-ticket.dto';
 import { RedisConfigService } from '@app/redis-config';
 import { faker } from '@faker-js/faker';
-import { title } from 'process';
 
 @Injectable()
 export class TicketsService {

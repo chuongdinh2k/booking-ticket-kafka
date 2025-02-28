@@ -93,6 +93,7 @@
       "^@app/db-config(|/.*)$": "<rootDir>/libs/db-config/src/$1",
       "^@app/kafka-config(|/.*)$": "<rootDir>/libs/kafka-config/src/$1",
       "^@app/libs(|/.*)$": "<rootDir>/libs/libs/src/$1",
+      "^@app/prometheus-config(|/.*)$": "<rootDir>/libs/prometheus-config/src/$1",
       "^@app/redis-config(|/.*)$": "<rootDir>/libs/redis-config/src/$1"
     }
   }

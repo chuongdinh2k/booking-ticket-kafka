@@ -1,0 +1,30 @@
+- run prometheus: 
+
+ docker run -d \
+  --name prometheus \
+  -p 9090:9090 \
+  -v $(pwd)/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml \
+  prom/prometheus
+
+- run grafana: 
+
+docker run -d \
+  --name grafana \
+  -p 5000:3000 \
+  grafana/grafana
+
+- run cadvisor: 
+
+docker run -d \
+  --name=cadvisor \
+  --volume=/:/rootfs:ro \
+  --volume=/var/run:/var/run:ro \
+  --volume=/sys:/sys:ro \
+  --volume=/var/lib/docker/:/var/lib/docker:ro \
+  --volume=/dev/disk/:/dev/disk:ro \
+  --publish=8080:8080 \
+  gcr.io/cadvisor/cadvisor:v0.47.0
+
+
+- node exporter
+docker run -d --name=node_exporter --net="host" --pid="host" -v "/:/host:ro,rslave" prom/node-exporter

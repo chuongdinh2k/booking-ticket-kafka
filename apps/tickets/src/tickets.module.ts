@@ -9,9 +9,11 @@ import {
 } from '@app/db-config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RedisConfigModule } from '@app/redis-config';
+import { PrometheusModule } from '@app/prometheus-config';
 
 @Module({
   imports: [
+    PrometheusModule,
     RedisConfigModule,
     DbConfigModule,
     TypeOrmModule.forFeature([Ticket, AppEvent, TicketTypeEntity]),
