@@ -23,6 +23,7 @@ RUN npm install --only=production
 
 COPY . .
 
-COPY --from=development /usr/src/app/dist/apps/tickets ./dist/apps/orders-taker
+# Fix the destination path to match your CMD
+COPY --from=development /usr/src/app/dist/apps/tickets ./dist/apps/tickets
 
 CMD ["node", "dist/apps/tickets/main"]

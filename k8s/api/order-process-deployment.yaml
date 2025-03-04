@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-processor-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-processor-service
+  template:
+    metadata:
+      labels:
+        app: order-processor-service
+    spec:
+      containers:
+        - name: order-processor-service
+          image: stephendinh/booking-system-order-processor:1
+          command: ['node', 'dist/apps/order-processor/main']
+          ports:
+            - containerPort: 9100 # Map port 9100 for Prometheus metrics
+          env:
+            - name: REDIS_HOST
+              value: 'redis'
+            - name: REDIS_PORT
+              value: '6379'
+            - name: DB_HOST
+              value: 'mysql'
+            - name: DB_PORT
+              value: '3306'
+            - name: DB_USERNAME
+              value: 'root'
+            - name: DB_PASSWORD
+              value: 'admin123'
+            - name: DB_DATABASE
+              value: 'booking_tickets'
+            - name: KAFKA_BROKER
+              value: 'kafka:29092'
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-processor-service
+spec:
+  selector:
+    app: order-processor-service
+  ports:
+    - protocol: TCP
+      port: 9100
+      targetPort: 9100
+  type: LoadBalancer
